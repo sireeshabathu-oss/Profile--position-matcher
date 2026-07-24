@@ -94,5 +94,6 @@ Contributions and suggestions welcome — feel free to open an issue or PR if yo
 
 ## License
 
-[MIT](LICENSE) — free to use, modify, and distribute.
+This project is licensed under the MIT License.
+
 
