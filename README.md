@@ -2,7 +2,7 @@
 
 A single-file, self-contained tool for matching candidate profiles against open job positions. Styled as a talent case file / dossier.
 
-**[▶ Live Demo](https://<your-username>.github.io/<repo-name>/)** — replace with your GitHub Pages URL after deploying (see below)
+**[▶ Live Demo]([https://<your-username>.github.io/<repo-name>/](https://sireeshabathu-oss.github.io/Profile--position-matcher/))** 
 
 ![Match Matrix screenshot](screenshots/match-matrix.png)
 
