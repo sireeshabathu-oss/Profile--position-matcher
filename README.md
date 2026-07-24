@@ -2,7 +2,7 @@
 
 A web-based application that evaluates how well a candidate matches a job position using a weighted scoring algorithm. The application compares required skills, preferred skills, and experience to generate an overall compatibility score.
 
-**[▶ Live Demo]([https://<your-username>.github.io/<repo-name>/](https://sireeshabathu-oss.github.io/Profile--position-matcher/))** 
+**[▶ Live Demo]([https://<your-username>.github.io/<repo-name>/](https://sireeshabathu-oss.github.io/Profile--position-matcher/)](https://sireeshabathu-oss.github.io/Profile--position-matcher/))** 
 
 ![Match Matrix screenshot](screenshots/match-matrix.png)
 
