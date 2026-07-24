@@ -41,6 +41,18 @@ Just open `index.html` in any browser — no build step, no dependencies, no ser
 
 You can also serve it as a static page (e.g. via GitHub Pages) to share a live link.
 
+## Challenges & Learnings
+
+### Challenges
+- Designing a fair and balanced matching algorithm for candidate evaluation.
+- Organizing JavaScript code to keep the application modular and maintainable.
+- Creating an intuitive and responsive user interface.
+
+### Learnings
+- Improved my JavaScript problem-solving and DOM manipulation skills.
+- Learned how to implement a weighted scoring algorithm.
+- Gained experience in structuring a real-world front-end project.
+- Enhanced my Git and GitHub workflow, including documentation and deployment with GitHub Pages.
 ## Enabling GitHub Pages (optional)
 
 1. Push this repo to GitHub
