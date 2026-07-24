@@ -1,6 +1,6 @@
 # Profile ↔ Position Matcher
 
-A single-file, self-contained tool for matching candidate profiles against open job positions. Styled as a talent case file / dossier.
+A web-based application that evaluates how well a candidate matches a job position using a weighted scoring algorithm. The application compares required skills, preferred skills, and experience to generate an overall compatibility score.
 
 **[▶ Live Demo]([https://<your-username>.github.io/<repo-name>/](https://sireeshabathu-oss.github.io/Profile--position-matcher/))** 
 
