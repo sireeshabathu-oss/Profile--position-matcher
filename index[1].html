@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Case File — Profile to Position Matching</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --paper: #EDE6D6;
+  --paper-dark: #DED2B8;
+  --card: #FAF7EF;
+  --ink: #232A34;
+  --ink-soft: #5B5A4E;
+  --stamp: #A63A2E;
+  --stamp-soft: #C77A6E;
+  --olive: #6E7455;
+  --olive-soft: #DDE1CC;
+  --line: #C6B99A;
+  --gold: #B08D3E;
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  margin:0;
+  background: var(--paper);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 3px);
+  color: var(--ink);
+  font-family: 'Libre Baskerville', Georgia, serif;
+  padding: 28px 16px 60px;
+}
+
+.wrap{ max-width: 980px; margin: 0 auto; }
+
+/* Header */
+.masthead{
+  display:flex; justify-content: space-between; align-items:flex-end;
+  border-bottom: 3px double var(--ink);
+  padding-bottom: 14px; margin-bottom: 4px;
+}
+.masthead .title{
+  font-family: 'Special Elite', monospace;
+  font-size: 28px; letter-spacing: 0.5px;
+}
+.masthead .subtitle{
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 1.5px;
+}
+.case-no{
+  font-family:'IBM Plex Mono', monospace; font-size:12px; color: var(--ink-soft);
+  text-align:right;
+}
+
+/* Tabs styled as folder dividers */
+.tabs{ display:flex; gap:6px; margin: 22px 0 0; }
+.tab{
+  font-family: 'Special Elite', monospace;
+  font-size: 13px;
+  padding: 10px 18px 9px;
+  background: var(--paper-dark);
+  border: 1px solid var(--line);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  color: var(--ink-soft);
+  position: relative;
+  top: 1px;
+  transition: background .15s, color .15s;
+}
+.tab.active{
+  background: var(--card);
+  color: var(--ink);
+  font-weight: bold;
+}
+.tab .count{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 10px;
+  background: var(--olive);
+  color: var(--card);
+  border-radius: 10px;
+  padding: 1px 6px;
+  margin-left: 6px;
+}
+
+.panel{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 0 8px 8px 8px;
+  padding: 24px;
+  min-height: 320px;
+}
+
+/* Entry cards */
+.entry-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom: 20px; }
+@media (max-width: 720px){ .entry-grid{ grid-template-columns: 1fr; } }
+
+.card{
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 16px 16px 14px;
+  background: var(--paper);
+  position: relative;
+}
+.card .tag-name{
+  font-family:'Special Elite', monospace;
+  font-size: 16px;
+  margin: 0 0 6px;
+}
+.card .meta{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 11.5px; color: var(--ink-soft); margin-bottom: 8px;
+}
+.card .skills{ display:flex; flex-wrap:wrap; gap:5px; margin-bottom: 4px; }
+.pill{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: var(--olive-soft);
+  color: var(--olive);
+  border: 1px solid var(--olive);
+}
+.pill.nice{ background: #f1e6d0; color: var(--gold); border-color: var(--gold); }
+.remove-btn{
+  position:absolute; top:10px; right:10px;
+  background:none; border:none; cursor:pointer;
+  color: var(--stamp); font-family:'IBM Plex Mono',monospace; font-size:11px;
+  opacity:.55;
+}
+.remove-btn:hover{ opacity:1; }
+
+/* Form */
+.form-box{
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  padding: 16px;
+  background: rgba(255,255,255,0.35);
+}
+.form-box h3{
+  font-family:'Special Elite', monospace; font-size:14px; margin:0 0 12px;
+  text-transform: uppercase; letter-spacing: 1px; color: var(--ink-soft);
+}
+.field-row{ display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+.field{ flex:1; min-width: 160px; }
+.field label{
+  display:block; font-family:'IBM Plex Mono',monospace; font-size:10px;
+  text-transform:uppercase; letter-spacing:.5px; color: var(--ink-soft); margin-bottom:4px;
+}
+.field input, .field textarea{
+  width:100%; padding:8px 9px; font-family:'Libre Baskerville', serif; font-size:13px;
+  border:1px solid var(--line); border-radius:4px; background:var(--card); color:var(--ink);
+}
+.field input:focus, .field textarea:focus{ outline:2px solid var(--gold); outline-offset:1px; }
+.field textarea{ resize:vertical; min-height:44px; }
+.hint{ font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--ink-soft); margin-top:3px; }
+
+.btn{
+  font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:.5px;
+  padding:9px 16px; border-radius:5px; border:1px solid var(--ink); cursor:pointer;
+  background: var(--ink); color: var(--card); text-transform: uppercase;
+}
+.btn:hover{ background: #3a4356; }
+.btn.secondary{ background: transparent; color: var(--ink); }
+.btn.secondary:hover{ background: var(--paper-dark); }
+
+.empty-note{
+  font-family:'IBM Plex Mono', monospace; font-size:12px; color: var(--ink-soft);
+  border: 1px dashed var(--line); border-radius:6px; padding: 22px; text-align:center;
+  margin-bottom: 20px;
+}
+
+/* Match matrix */
+.matrix-wrap{ overflow-x:auto; }
+table.matrix{ border-collapse: collapse; width:100%; min-width: 560px; }
+table.matrix th, table.matrix td{ border:1px solid var(--line); padding: 0; }
+table.matrix th{
+  font-family:'IBM Plex Mono', monospace; font-size:11px; padding:10px 8px;
+  background: var(--paper-dark); text-align:left; color: var(--ink);
+}
+table.matrix th.rowhead{ background: var(--paper-dark); position:sticky; left:0; z-index:1; min-width:150px; }
+table.matrix td.rowhead-cell{
+  font-family:'Special Elite', monospace; font-size:12.5px; padding:10px 10px;
+  background: var(--paper-dark); position:sticky; left:0;
+}
+.score-cell{ cursor:pointer; text-align:center; padding: 6px !important; }
+.score-inner{
+  margin: 4px; padding: 10px 6px; border-radius: 4px;
+  font-family:'IBM Plex Mono', monospace; font-weight:600; font-size: 14px;
+  transition: transform .1s;
+}
+.score-cell:hover .score-inner{ transform: scale(1.04); }
+
+.stamp{
+  display:inline-block; font-family:'Special Elite', monospace;
+  border: 2px solid currentColor; border-radius: 4px; padding: 2px 6px;
+  transform: rotate(-3deg); font-size: 9.5px; letter-spacing: .5px;
+  margin-top: 3px;
+}
+
+/* Drawer / detail */
+.drawer{
+  margin-top: 22px; border-top: 3px double var(--ink); padding-top: 16px;
+}
+.drawer h3{ font-family:'Special Elite', monospace; font-size:16px; margin:0 0 4px; }
+.drawer .drawer-sub{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); margin-bottom:14px; }
+.drawer-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width:720px){ .drawer-grid{ grid-template-columns: 1fr; } }
+.drawer-col h4{
+  font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase;
+  letter-spacing:.5px; margin:0 0 8px; color: var(--ink-soft);
+}
+
+.section-title{
+  font-family:'Special Elite', monospace; font-size: 15px; margin: 0 0 14px;
+  display:flex; align-items:center; gap:8px;
+}
+.section-title .rule{ flex:1; height:1px; background: var(--line); }
+
+footer{
+  text-align:center; margin-top: 24px; font-family:'IBM Plex Mono', monospace;
+  font-size: 10.5px; color: var(--ink-soft);
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div>
+      <div class="title">Case File No. 7 — Profile ↔ Position Matching</div>
+      <div class="subtitle">Talent Placement Dossier</div>
+    </div>
+    <div class="case-no" id="dateStamp"></div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="candidates">Candidates <span class="count" id="candCount">0</span></div>
+    <div class="tab" data-tab="positions">Positions <span class="count" id="posCount">0</span></div>
+    <div class="tab" data-tab="matches">Match Matrix</div>
+  </div>
+
+  <div class="panel" id="panel-candidates"></div>
+  <div class="panel" id="panel-positions" style="display:none;"></div>
+  <div class="panel" id="panel-matches" style="display:none;"></div>
+
+  <footer>Scores weight required skills 70% · nice-to-have skills 20% · experience fit 10%</footer>
+</div>
+
+<script>
+// ---------- State ----------
+let candidates = [
+  { id: cid(), name: "Priya Nair", experience: 5, skills: ["Python","SQL","Machine Learning","Data Visualization"], summary: "Data scientist with retail forecasting background." },
+  { id: cid(), name: "Daniel Osei", experience: 2, skills: ["JavaScript","React","CSS","Node.js"], summary: "Frontend engineer, recent bootcamp grad, fast learner." }
+];
+let positions = [
+  { id: pid(), title: "Senior Data Scientist", required: ["Python","Machine Learning","SQL"], nice: ["Data Visualization","A/B Testing"], minExperience: 4 },
+  { id: pid(), title: "Frontend Engineer", required: ["JavaScript","React"], nice: ["CSS","TypeScript"], minExperience: 1 }
+];
+let activeDetail = null; // {candId, posId}
+
+function cid(){ return 'c_' + Math.random().toString(36).slice(2,9); }
+function pid(){ return 'p_' + Math.random().toString(36).slice(2,9); }
+
+document.getElementById('dateStamp').textContent = 'Opened ' + new Date().toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
+
+// ---------- Tabs ----------
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    ['candidates','positions','matches'].forEach(name=>{
+      document.getElementById('panel-'+name).style.display = (name===t.dataset.tab) ? 'block':'none';
+    });
+    if(t.dataset.tab==='matches') renderMatches();
+  });
+});
+
+// ---------- Helpers ----------
+function parseTags(str){
+  return str.split(',').map(s=>s.trim()).filter(Boolean);
+}
+function norm(s){ return s.trim().toLowerCase(); }
+
+function skillOverlap(candSkills, reqSkills){
+  const candSet = candSkills.map(norm);
+  const matched = reqSkills.filter(r => candSet.includes(norm(r)));
+  return matched;
+}
+
+function computeScore(cand, pos){
+  const reqMatched = skillOverlap(cand.skills, pos.required);
+  const niceMatched = skillOverlap(cand.skills, pos.nice);
+  const reqScore = pos.required.length ? reqMatched.length / pos.required.length : 1;
+  const niceScore = pos.nice.length ? niceMatched.length / pos.nice.length : 1;
+  const expScore = pos.minExperience > 0 ? Math.min(1, cand.experience / pos.minExperience) : 1;
+  const total = reqScore*0.7 + niceScore*0.2 + expScore*0.1;
+  return {
+    pct: Math.round(total*100),
+    reqMatched, reqMissing: pos.required.filter(r=>!reqMatched.includes(r)),
+    niceMatched, niceMissing: pos.nice.filter(n=>!niceMatched.includes(n)),
+    expOk: cand.experience >= pos.minExperience
+  };
+}
+
+function scoreColor(pct){
+  if(pct >= 80) return { bg:'#dfe8d4', fg:'#4a5c2f' };
+  if(pct >= 55) return { bg:'#f1e6c8', fg:'#8a6a1f' };
+  return { bg:'#f0d9d4', fg:'#8a3226' };
+}
+
+// ---------- Render: Candidates ----------
+function renderCandidates(){
+  const el = document.getElementById('panel-candidates');
+  document.getElementById('candCount').textContent = candidates.length;
+  let html = '';
+  if(candidates.length===0){
+    html += `<div class="empty-note">No candidate profiles on file yet. Add one below.</div>`;
+  } else {
+    html += `<div class="entry-grid">`;
+    candidates.forEach(c=>{
+      html += `<div class="card">
+        <button class="remove-btn" onclick="removeCandidate('${c.id}')">remove ✕</button>
+        <div class="tag-name">${escapeHtml(c.name)}</div>
+        <div class="meta">${c.experience} yrs experience</div>
+        <div class="skills">${c.skills.map(s=>`<span class="pill">${escapeHtml(s)}</span>`).join('')}</div>
+        ${c.summary ? `<div class="meta" style="margin-top:8px; font-style:italic;">${escapeHtml(c.summary)}</div>` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  html += `
+    <div class="form-box">
+      <h3>File a new candidate</h3>
+      <div class="field-row">
+        <div class="field"><label>Name</label><input id="cf-name" placeholder="e.g. Priya Nair"></div>
+        <div class="field" style="max-width:140px;"><label>Years experience</label><input id="cf-exp" type="number" min="0" placeholder="0"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Skills (comma separated)</label><input id="cf-skills" placeholder="Python, SQL, Machine Learning">
+        <div class="hint">Match against required &amp; nice-to-have skills on positions</div></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Summary (optional)</label><textarea id="cf-summary" placeholder="Short background note"></textarea></div>
+      </div>
+      <button class="btn" onclick="addCandidate()">Add candidate</button>
+    </div>
+  `;
+  el.innerHTML = html;
+}
+
+function addCandidate(){
+  const name = document.getElementById('cf-name').value.trim();
+  const exp = parseFloat(document.getElementById('cf-exp').value) || 0;
+  const skills = parseTags(document.getElementById('cf-skills').value);
+  const summary = document.getElementById('cf-summary').value.trim();
+  if(!name){ flashRequired('cf-name'); return; }
+  candidates.push({ id: cid(), name, experience: exp, skills, summary });
+  renderCandidates();
+}
+function removeCandidate(id){
+  candidates = candidates.filter(c=>c.id!==id);
+  renderCandidates();
+}
+
+// ---------- Render: Positions ----------
+function renderPositions(){
+  const el = document.getElementById('panel-positions');
+  document.getElementById('posCount').textContent = positions.length;
+  let html = '';
+  if(positions.length===0){
+    html += `<div class="empty-note">No open positions on file yet. Add one below.</div>`;
+  } else {
+    html += `<div class="entry-grid">`;
+    positions.forEach(p=>{
+      html += `<div class="card">
+        <button class="remove-btn" onclick="removePosition('${p.id}')">remove ✕</button>
+        <div class="tag-name">${escapeHtml(p.title)}</div>
+        <div class="meta">Min. ${p.minExperience} yrs experience</div>
+        <div class="skills">
+          ${p.required.map(s=>`<span class="pill">${escapeHtml(s)}</span>`).join('')}
+          ${p.nice.map(s=>`<span class="pill nice">${escapeHtml(s)}</span>`).join('')}
+        </div>
+        <div class="hint" style="margin-top:6px;">solid = required &nbsp;·&nbsp; gold = nice-to-have</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  html += `
+    <div class="form-box">
+      <h3>Open a new position</h3>
+      <div class="field-row">
+        <div class="field"><label>Title</label><input id="pf-title" placeholder="e.g. Senior Data Scientist"></div>
+        <div class="field" style="max-width:160px;"><label>Min. years experience</label><input id="pf-exp" type="number" min="0" placeholder="0"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Required skills (comma separated)</label><input id="pf-required" placeholder="Python, SQL"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Nice-to-have skills (comma separated)</label><input id="pf-nice" placeholder="Data Visualization"></div>
+      </div>
+      <button class="btn" onclick="addPosition()">Add position</button>
+    </div>
+  `;
+  el.innerHTML = html;
+}
+
+function addPosition(){
+  const title = document.getElementById('pf-title').value.trim();
+  const exp = parseFloat(document.getElementById('pf-exp').value) || 0;
+  const required = parseTags(document.getElementById('pf-required').value);
+  const nice = parseTags(document.getElementById('pf-nice').value);
+  if(!title){ flashRequired('pf-title'); return; }
+  positions.push({ id: pid(), title, required, nice, minExperience: exp });
+  renderPositions();
+}
+function removePosition(id){
+  positions = positions.filter(p=>p.id!==id);
+  renderPositions();
+}
+
+function flashRequired(fieldId){
+  const f = document.getElementById(fieldId);
+  f.style.outline = '2px solid #A63A2E';
+  setTimeout(()=>{ f.style.outline=''; }, 900);
+}
+
+// ---------- Render: Match Matrix ----------
+function renderMatches(){
+  const el = document.getElementById('panel-matches');
+  if(candidates.length===0 || positions.length===0){
+    el.innerHTML = `<div class="empty-note">Add at least one candidate and one position to generate the match matrix.</div>`;
+    return;
+  }
+  let html = `<div class="section-title">Match scores<span class="rule"></span></div>`;
+  html += `<div class="matrix-wrap"><table class="matrix"><thead><tr><th class="rowhead">Candidate \\ Position</th>`;
+  positions.forEach(p=> html += `<th>${escapeHtml(p.title)}</th>`);
+  html += `</tr></thead><tbody>`;
+
+  candidates.forEach(c=>{
+    html += `<tr><td class="rowhead-cell">${escapeHtml(c.name)}</td>`;
+    positions.forEach(p=>{
+      const r = computeScore(c,p);
+      const col = scoreColor(r.pct);
+      html += `<td class="score-cell" onclick="showDetail('${c.id}','${p.id}')">
+        <div class="score-inner" style="background:${col.bg}; color:${col.fg};">${r.pct}%</div>
+      </td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table></div>`;
+
+  // Best match callouts
+  html += `<div class="section-title" style="margin-top:22px;">Top pick per position<span class="rule"></span></div>`;
+  html += `<div class="entry-grid">`;
+  positions.forEach(p=>{
+    let best=null, bestScore=-1;
+    candidates.forEach(c=>{
+      const r = computeScore(c,p);
+      if(r.pct>bestScore){ bestScore=r.pct; best=c; }
+    });
+    const col = scoreColor(bestScore);
+    html += `<div class="card">
+      <div class="tag-name">${escapeHtml(p.title)}</div>
+      <div class="meta">Best fit: ${best?escapeHtml(best.name):'—'}</div>
+      <span class="stamp" style="color:${col.fg};">${bestScore}% MATCH</span>
+    </div>`;
+  });
+  html += `</div>`;
+
+  html += `<div id="detailDrawer"></div>`;
+  el.innerHTML = html;
+
+  if(activeDetail) renderDetail();
+}
+
+function showDetail(candId, posId){
+  activeDetail = { candId, posId };
+  renderDetail();
+}
+
+function renderDetail(){
+  const drawer = document.getElementById('detailDrawer');
+  if(!drawer || !activeDetail) return;
+  const c = candidates.find(x=>x.id===activeDetail.candId);
+  const p = positions.find(x=>x.id===activeDetail.posId);
+  if(!c || !p){ drawer.innerHTML=''; return; }
+  const r = computeScore(c,p);
+  const col = scoreColor(r.pct);
+
+  drawer.innerHTML = `
+    <div class="drawer">
+      <h3>${escapeHtml(c.name)} → ${escapeHtml(p.title)} <span class="stamp" style="color:${col.fg}; margin-left:8px;">${r.pct}%</span></h3>
+      <div class="drawer-sub">Experience: ${c.experience} yrs on file · position requires ${p.minExperience} yrs ${r.expOk ? '(met)' : '(short)'}</div>
+      <div class="drawer-grid">
+        <div class="drawer-col">
+          <h4>Required skills</h4>
+          <div class="skills">
+            ${p.required.map(s=>`<span class="pill" style="${r.reqMatched.includes(s)?'':'opacity:.35; text-decoration:line-through;'}">${escapeHtml(s)}</span>`).join('') || '<span class="hint">none specified</span>'}
+          </div>
+        </div>
+        <div class="drawer-col">
+          <h4>Nice-to-have skills</h4>
+          <div class="skills">
+            ${p.nice.map(s=>`<span class="pill nice" style="${r.niceMatched.includes(s)?'':'opacity:.35; text-decoration:line-through;'}">${escapeHtml(s)}</span>`).join('') || '<span class="hint">none specified</span>'}
+          </div>
+        </div>
+      </div>
+      ${c.summary ? `<div class="hint" style="margin-top:14px; font-style:italic;">Candidate note: ${escapeHtml(c.summary)}</div>` : ''}
+    </div>
+  `;
+}
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+// ---------- Init ----------
+renderCandidates();
+renderPositions();
+</script>
+</body>
+</html>
