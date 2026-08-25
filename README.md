@@ -6,7 +6,8 @@ A web-based application that evaluates how well a candidate matches a job positi
 
 🔗 **Live Demo:** https://sireeshabathu-oss.github.io/Profile--position-matcher/
 
-![Match Matrix screenshot](screenshots/match-matrix.png)
+<img width="1100" height="850" alt="match-matrix" src="https://github.com/user-attachments/assets/f64ce004-5121-43a3-8260-106475dabebc" />
+
 
 ## Features
 
@@ -26,11 +27,14 @@ Each match score is computed as:
 
 | Candidates | Positions |
 |---|---|
-| ![Candidates tab](screenshots/candidates.png) | ![Positions tab](screenshots/positions.png) |
+<img width="1100" height="850" alt="candidates" src="https://github.com/user-attachments/assets/e70bd14f-c647-483d-92b3-a7349e001dbf" />
+ | <img width="1100" height="850" alt="positions" src="https://github.com/user-attachments/assets/04084c68-011d-45c3-9d85-6a64b6e17b6a" />
+
 
 | Match Matrix | Match Detail |
 |---|---|
-| ![Match matrix](screenshots/match-matrix.png) | ![Match detail drawer](screenshots/match-detail.png) |
+<img width="1100" height="850" alt="match-matrix" src="https://github.com/user-attachments/assets/4d10a753-d70a-45e0-a4e3-f245e7937e97" />
+ | <img width="1100" height="850" alt="match-detail" src="https://github.com/user-attachments/assets/40670dd3-7372-420b-9b8c-bede974ac61d" />
 
 ## Usage
 
